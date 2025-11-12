@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вакансии фармацевта в Иваново</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .date {
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        .intro {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .vacancy-card {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .vacancy-card:hover {
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+        
+        .company-name {
+            color: #667eea;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .position {
+            color: #764ba2;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #555;
+            margin-right: 8px;
+            min-width: 80px;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .salary {
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .contacts {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .contact-item {
+            margin: 8px 0;
+        }
+        
+        .phone {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .website {
+            color: #764ba2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .website:hover {
+            text-decoration: underline;
+        }
+        
+        .addresses {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            text-align: center;
+            color: #666;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 5px 5px 5px 0;
+        }
+        
+        .tag.experience {
+            background: #4caf50;
+        }
+        
+        .recommendations {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .recommendations h2 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .recommendations ul {
+            margin-left: 20px;
+        }
+        
+        .recommendations li {
+            margin: 8px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💊 Вакансии фармацевта в Иваново</h1>
+            <p class="subtitle">Актуальные предложения для молодых специалистов</p>
+            <p class="date">Обновлено: 12 ноября 2025 года</p>
+        </header>
+
+        <div class="intro">
+            <p><strong>Для вашей дочери:</strong> Подборка вакансий фармацевта и провизора в Иваново для начинающих специалистов. Большинство работодателей готовы принимать сотрудников без опыта работы при наличии профильного образования и свидетельства об аккредитации.</p>
+        </div>
+
+        <div class="recommendations">
+            <h2>📋 Рекомендации для трудоустройства:</h2>
+            <ul>
+                <li><strong>Документы:</strong> Диплом о фармацевтическом образовании, свидетельство об аккредитации специалиста (обязательно)</li>
+                <li><strong>Опыт:</strong> Большинство работодателей готовы принять без опыта</li>
+                <li><strong>График:</strong> Обычно сменный 2/2 или 5/2, возможен гибкий график</li>
+                <li><strong>Зарплата:</strong> Для начинающих от 55 000 до 70 000 рублей</li>
+                <li><strong>Бонусы:</strong> Официальное трудоустройство, соцпакет, обучение, карьерный рост</li>
+            </ul>
+        </div>
+
+        <!-- Вакансия 1 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Сеть аптек Апрель</div>
+            <div class="position">Фармацевт-Провизор-Медицинский консультант</div>
+            <div class="salary">💰 от 70 000 ₽</div>
+            <span class="tag experience">Без опыта</span>
+            <span class="tag">Федеральная сеть</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">Сменный график</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">8-800-200-90-01</span>, 
+                    <span class="phone">+7 (918) 200-90-01</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://apteka-april.ru" class="website" target="_blank">apteka-april.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> мкр. ДСК, 4 (круглосуточно); пр-кт Ленина, 102; ул. Лежневская, 173; пр-кт Строителей, 118; ул. Богдана Хмельницкого, 44 и еще более 20 адресов по городу
+            </div>
+        </div>
+
+        <!-- Вакансия 2 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Аптечная сеть Максавит и 36,7</div>
+            <div class="position">Фармацевт-провизор</div>
+            <div class="salary">💰 от 68 000 ₽</div>
+            <span class="tag experience">Без опыта</span>
+            <span class="tag">Федеральная сеть</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">2/2, 5/2, гибкий график</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">+7 930 349-08-21</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://maksavit.ru" class="website" target="_blank">maksavit.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> ул. Ермака, 36; ул. Ермака, 43; ул. Богдана Хмельницкого, 36; ул. Дюковская, 19А; ул. Генерала Хлебникова, 3, 6, 36; ул. Калинина, 17; Кохомское шоссе, 6Г и еще более 20 аптек
+            </div>
+        </div>
+
+        <!-- Вакансия 3 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Мелодия здоровья</div>
+            <div class="position">Фармацевт-провизор</div>
+            <div class="salary">💰 от 67 000 ₽</div>
+            <span class="tag experience">Без опыта</span>
+            <span class="tag">Федеральная сеть</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">Сменный график</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru, careerist.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">+7 (4932) 92-01-17</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://melzdrav.ru" class="website" target="_blank">melzdrav.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> ул. Лежневская, 144 (Гипермаркет "Магнит"); пр-т Ленина, 9 (ТЦ "Плаза"); ул. Куконковых, 141 (ТРМ)
+            </div>
+        </div>
+
+        <!-- Вакансия 4 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Аптеки ВИТА</div>
+            <div class="position">Фармацевт/Провизор</div>
+            <div class="salary">💰 от 65 000 ₽</div>
+            <span class="tag experience">Без опыта</span>
+            <span class="tag">Федеральная сеть</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">Сменный график</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">8-800-755-00-03</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://vitaexpress.ru" class="website" target="_blank">vitaexpress.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> Ленинский район (Лежневская, 130А); Октябрьский район; пр-кт Ленина, 7; пр-кт Ленина, 88; более 22 филиалов в городе
+            </div>
+        </div>
+
+        <!-- Вакансия 5 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Аптеки Столички</div>
+            <div class="position">Фармацевт/Провизор</div>
+            <div class="salary">💰 от 65 000 ₽</div>
+            <span class="tag experience">Без опыта</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">Сменный график</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">+7 (4932) 95-20-71</span>, 
+                    <span class="phone">+7 (495) 215-52-15</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://stolichki.ru" class="website" target="_blank">stolichki.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> пр-кт Ленина, 3; пр-кт Ленина, 100; ул. Кузнецова, 52; ул. Громобоя, 15; ул. Богдана Хмельницкого, 40; ул. Рабфаковская, 36; более 12 филиалов
+            </div>
+        </div>
+
+        <!-- Вакансия 6 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Ригла</div>
+            <div class="position">Провизор/Фармацевт</div>
+            <div class="salary">💰 от 62 000 ₽</div>
+            <span class="tag experience">Без опыта</span>
+            <span class="tag">Федеральная сеть</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">Сменный график</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru, superjob.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">8-800-777-03-03</span> (горячая линия), 
+                    <span class="phone">+7 (4932) 93-31-63</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://rigla.ru" class="website" target="_blank">rigla.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> ул. 8 Марта, 32 (ТЦ "Серебряный город"); ул. Куконковых, 141 (ТЦ "Евролэнд"); пр-кт. Текстильщиков, 39; пр-кт. Шереметьевский, 24
+            </div>
+        </div>
+
+        <!-- Вакансия 7 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Магнит Аптека</div>
+            <div class="position">Фармацевт/Провизор/Консультант</div>
+            <div class="salary">💰 от 66 654 до 105 000 ₽</div>
+            <span class="tag experience">Без опыта / 1-3 года</span>
+            <span class="tag">Федеральная сеть</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">Сменный график, вахта</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">8-800-200-78-03</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://apteka.magnit.ru" class="website" target="_blank">apteka.magnit.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> ул. Лежневская, 144; ул. Парижской Коммуны, 5-В; 1-я Меланжевая, 5А; 10-й проезд, 51; пр-кт Текстильщиков, 10А; 8 филиалов
+            </div>
+        </div>
+
+        <!-- Вакансия 8 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Аптечная сеть АСНА</div>
+            <div class="position">Фармацевт в федеральную сеть</div>
+            <div class="salary">💰 50 000 – 80 000 ₽</div>
+            <span class="tag">Опыт 1-3 года</span>
+            <span class="tag">Федеральная сеть</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">Сменный график</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">+7 (4932) 90-35-03</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://asna.ru" class="website" target="_blank">asna.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> ул. Постышева, 54а; ул. Велижская, 47; ул. Парижской Коммуны, 24; пр-кт Текстильщиков, 117
+            </div>
+        </div>
+
+        <!-- Вакансия 9 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Аптечная сеть Алоэ</div>
+            <div class="position">Фармацевт/Провизор</div>
+            <div class="salary">💰 от 55 000 ₽</div>
+            <span class="tag">Опыт 1-3 года</span>
+            <span class="tag">Федеральная сеть</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">График:</span>
+                    <span class="info-value">Сменный график</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">hh.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">☎️ Телефон:</span>
+                    <span class="phone">8-800-550-13-07</span>, 
+                    <span class="phone">+7 (493) 224-54-40</span>
+                </div>
+                <div class="contact-item">
+                    <span class="info-label">🌐 Сайт:</span>
+                    <a href="https://aloeapteka.ru" class="website" target="_blank">aloeapteka.ru</a>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Адреса аптек:</strong> Кохомское шоссе, 1д (ТЦ "РИО"); ул. Карла Маркса, 3 (магазин "Лента"); ул. Лежневская, 164 (магазин "Лента"); пл. Меланжистов, 5 (ТЦ "Кольцо")
+            </div>
+        </div>
+
+        <!-- Вакансия 10 -->
+        <div class="vacancy-card">
+            <div class="company-name">🏥 Abbott Laboratories</div>
+            <div class="position">Медицинский представитель подразделения лекарственных препаратов</div>
+            <div class="salary">💰 По договорённости</div>
+            <span class="tag">Высшее образование</span>
+            <span class="tag">Международная компания</span>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Требования:</span>
+                    <span class="info-value">Высшее образование (приоритет мед/фарм)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Источник:</span>
+                    <span class="info-value">superjob.ru</span>
+                </div>
+            </div>
+            
+            <div class="contacts">
+                <div class="contact-item">
+                    <span class="info-label">📝 Примечание:</span>
+                    <span class="info-value">Контакты уточняйте на сайте вакансий</span>
+                </div>
+            </div>
+            
+            <div class="addresses">
+                <strong>📍 Территория работы:</strong> город Иваново и Ивановская область
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>📌 Полезные ссылки для поиска работы:</strong></p>
+            <p>
+                🔹 <a href="https://ivanovo.hh.ru" target="_blank">hh.ru</a> — HeadHunter Иваново<br>
+                🔹 <a href="https://ivanovo.superjob.ru" target="_blank">superjob.ru</a> — SuperJob Иваново<br>
+                🔹 <a href="https://avito.ru/ivanovo/vakansii" target="_blank">avito.ru</a> — Avito Работа<br>
+                🔹 <a href="https://ivanovo.careerist.ru" target="_blank">careerist.ru</a> — Careerist
+            </p>
+            <p style="margin-top: 20px; color: #999; font-size: 0.9em;">
+                Документ создан: 12 ноября 2025 года<br>
+                Информация актуальна на момент создания
+            </p>
+        </div>
+    </div>
+</body>
+</html>
