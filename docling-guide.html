@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Руководство: Docling Serve с OCR для кириллицы</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #212529;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #1a1a1a;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    code {
+      background-color: #f8f9fa;
+      border-radius: 3px;
+      padding: 0.2em 0.4em;
+      font-size: 0.9em;
+    }
+    pre {
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 12px;
+      overflow-x: auto;
+    }
+    ul, ol {
+      margin-left: 20px;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Руководство: Docling Serve с OCR для кириллицы</h1>
+
+<h2>Введение</h2>
+<p>Это полное руководство по развёртыванию Docling Serve в Docker с поддержкой OCR и кириллицы. Описаны:</p>
+<ul>
+  <li>сборка образа;</li>
+  <li>запуск сервиса;</li>
+  <li>работа с API;</li>
+  <li>решение типичных проблем при конвертации PDF.</li>
+</ul>
+
+
+<h2>Подготовка окружения</h2>
+
+<h3>Требования</h3>
+<ul>
+  <li>Docker (проверьте: <code>docker --version</code>);</li>
+  <li>базовый образ: <code>quay.io/docling-project/docling-serve</code>.</li>
+</ul>
+
+
+<h3>Проверка Docker</h3>
+<p>Выполните в терминале:</p>
+<pre>docker --version
+docker compose version  # или docker-compose --version</pre>
+<p>Если Docker Compose не установлен (на Linux):</p>
+<pre>sudo apt install docker-compose -y</pre>
+
+
+<h2>Развёртывание через Docker Compose</h2>
+<h3>Файл <code>docker-compose.yml</code></h3>
+<p>Создайте файл <code>docker-compose.yml</code> со следующим содержимым:</p>
+<pre>services:
+  docling:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    container_name: docling-ru
+    restart: unless-stopped</pre>
+
+
+<h3>Файл <code>Dockerfile</code></h3>
+<p>Создайте файл <code>Dockerfile</code> в той же папке:</p>
+<pre>FROM quay.io/docling-project/docling-serve
+# Установка Tesseract OCR и русского языкового пакета
+RUN apt-get update &amp;&amp; \
+    apt-get install -y tesseract-ocr tesseract-ocr-rus &amp;&amp; \
+    rm -rf /var/lib/apt/lists/*
+
+
+# Проверка наличия русского языкового пакета
+RUN test -f /usr/share/tesseract-ocr/5/tessdata/rus.traineddata || \
+    test -f /usr/share/tesseract-ocr/4.0/tessdata/rus.traineddata</pre>
+
+
+<h3>Запуск сервиса</h3>
+<ol>
+  <li>Поместите оба файла (<code>docker-compose.yml</code> и <code>Dockerfile</code>) в одну папку.</li>
+  <li>Откройте терминал в этой папке и выполните:<pre>docker compose up -d --build</pre>
+  Флаг <code>-d</code> запускает контейнер в фоновом режиме, <code>--build</code> пересоберёт образ при изменениях.</li>
+</ol>
+
+
+<h3>Проверка статуса</h3>
+<p>Убедитесь, что контейнер запущен:</p>
+<pre>docker compose ps</pre>
+<p>Вы должны увидеть строку с <code>docling-ru</code> и статусом <code>Up</code>.</p>
+
+
+<h3>Остановка сервиса</h3>
+<p>Чтобы остановить контейнер:</p>
+<pre>docker compose stop</pre>
+<p>Чтобы удалить контейнеры и сети:</p>
+<pre>docker compose down</pre>
+
+
+<h2>Работа с API</h2>
+<h3>Основные эндпоинты</h3>
+<ul>
+  <li><strong>API:</strong> <code>http://&lt;IP&gt;:5001</code></li>
+  <li><strong>Документация (Swagger UI):</strong> <code>http://&lt;IP&gt;:5001/docs</code></li>
+  <li><strong>Проверка статуса:</strong> <code>http://&lt;IP&gt;:5001/health</code></li>
+</ul>
+<p><em>Замените <code>&lt;IP&gt;</code> на IP вашего сервера (например, <code>192.168.0.186</code>).</em></p>
+
+
+<h3>Пример запроса через curl</h3>
+<p>Отправьте PDF на конвертацию:</p>
+<pre>curl -X POST "http://&lt;IP&gt;:5001/v1/convert" \
+  -F "file=@./test.pdf" \
+  -F "output_format=markdown" \
+  -F "ocr=true" \
+  -F "ocr_language=rus" \
+  -F "ocr_config=--psm 6 --oem 3"</pre>
+<p><strong>Параметры:</strong></p>
+<ul>
+  <li><code>file</code> — путь к файлу на диске;</li>
+  <li><code>output_format</code> — формат вывода: <code>text</code>, <code>markdown</code>, <code>html</code>, <code>json</code>;</li>
+  <li><code>ocr=true</code> — включить OCR;</li>
+  <li><code>ocr_language=rus</code> — язык распознавания;</li>
+  <li><code>ocr_config</code> — дополнительные настройки Tesseract (здесь: <code>--psm 6</code> для таблиц, <code>--oem 3</code> — современный движок).</li>
+</ul>
+
+
+<h3>Использование Swagger UI</h3>
+<ol>
+  <li>Откройте в браузере: <code>http://&lt;IP&gt;:5001/docs</code>.</li>
+  <li>Найдите эндпоинт <code>POST /v1/convert</code>.</li>
+  <li>Заполните поля:
+    <ul>
+      <li><code>file</code>: выберите файл с диска;</li>
+      <li><code>output_format</code>: <code>markdown</code>;</li>
+      <li><code>ocr</code>: <code>true</code>;</li>
+      <li><code>ocr_language</code>: <code>rus</code>.</li>
+    </ul>
+  </li>
+  <li>Нажмите <strong>«Execute»</strong>.</li>
+  <li>Результат будет в разделе <strong>«Responses»</strong>.</li>
+</ol>
+
+
+<h2>Решение типичных проблем</h2>
+
+<h3>Проблема 1: «Каша» из кириллицы и цифр вместо таблицы</h3>
+<p><strong>Причины:</strong></p>
+<ol>
+  <li>PDF — скан без текстового слоя (документ состоит из изображений страниц, а не из текста).</li>
+  <li>Сложная вёрстка: таблицы, колонки, обтекание текстом, сноски — OCR путает порядок символов.</li>
+  <li>Низкое качество скана: размытые символы, тени, перекосы, низкая контрастность.</li>
+  <li>Неправильная кодировка или нестандартные шрифты в PDF.</li>
+  <li>Отсутствие настройки OCR специально для табличных данных.</li>
+</ol>
+
+
+<p><strong>Решения:</strong></p>
+
+
+<h4>1. Проверьте, есть ли текстовый слой в PDF</h4>
+<ul>
+  <li>Откройте PDF в <strong>Adobe Acrobat Reader</strong>.</li>
+  <li>Попробуйте выделить текст мышью:</li>
+  <ul>
+    <li>Если текст выделяется — документ содержит текстовый слой (проблема в настройках OCR).</li>
+    <li>Если не выделяется — это скан (нужен OCR с предобработкой изображения).</li>
+  </ul>
+</ul>
+
+<h4>2. Улучшите качество изображения (для сканов)</h4>
+<p>Перед OCR обработайте изображение, чтобы повысить читаемость:</p>
+<ul>
+  <li>Повысьте контрастность:</li>
+</ul>
+<pre>convert scanned.pdf -density 300 -contrast-stretch 10%x10%+0% output.pdf</pre>
+<ul>
+  <li>Удалите шумы (опционально):</li>
+</ul>
+<pre>convert output.pdf -noise 2 -normalize cleaned.pdf</pre>
+
+
+<h4>3. Настройте Tesseract для кириллицы и таблиц</h4>
+<p>В запросе к API добавьте параметры:</p>
+<pre>curl -X POST "http://&lt;IP&gt;:5001/v1/convert" \
+  -F "file=@./bad_pdf.pdf" \
+  -F "output_format=text" \
+  -F "ocr=true" \
+  -F "ocr_language=rus" \
+  -F "ocr_config=--psm 6 --oem 3"</pre>
+
+
+<p><strong>Ключевые параметры Tesseract:</strong></p>
+<ul>
+  <li><code>--psm 6</code> — режим «единый блок текста/таблица» (лучше для таблиц);</li>
+  <li><code>--oem 3</code> — движок LSTM (современный, точнее для кириллицы);</li>
+  <li><code>ocr_language=rus</code> — указание языка распознавания.</li>
+</ul>
+
+<h4>4. Используйте альтернативные инструменты для таблиц</h4>
+<p>Если Tesseract не справляется, попробуйте:</p>
+
+
+<ul>
+  <li><strong>Tabula</strong> (извлекает таблицы из PDF):</li>
+</ul>
+<pre>java -jar tabula-1.0.5-jar-with-dependencies.jar -p all -o output.csv input.pdf</pre>
+
+
+<ul>
+  <li><strong>Camelot</strong> (Python‑библиотека):</li>
+</ul>
+<pre>import camelot
+tables = camelot.read_pdf('input.pdf', flavor='stream')
+tables.export('output.csv', f='csv')</pre>
+
+
+<h4>5. Конвертируйте через PDF → DOCX → TXT</h4>
+<ol>
+  <li>Откройте PDF в <strong>Microsoft Word</strong> или <strong>LibreOffice Writer</strong>.</li>
+  <li>Сохраните как <code>.docx</code>.</li>
+  <li>Затем экспортируйте в <code>.txt</code>.</li>
+</ol>
+<p><em>Плюсы:</em> Word автоматически исправляет переносы и разбивает колонки.<br>
+<em>Минусы:</em> возможны потери форматирования.</p>
+
+
+<h4>6. Проверьте кодировку выходного файла</h4>
+<ol>
+  <li>Откройте TXT в <strong>VS Code</strong> или <strong>Notepad++</strong>.</li>
+  <li>Убедитесь, что кодировка — <strong>UTF‑8</strong>.</li>
+  <li>Если текст нечитаем — пересохраните файл в UTF‑8.</li>
+</ol>
+
+
+<h4>7. Используйте специализированные сервисы</h4>
+<p>Для сложных документов:</p>
+<ul>
+  <li><strong>Google Lens</strong> — распознавание изображений с таблицами;</li>
+  <li><strong>Online OCR</strong> — настройка языка и формата;</li>
+  <li><strong>Convertio</strong> — онлайн‑конвертер с поддержкой кириллицы.</li>
+</ul>
+
+
+<h3>Проблема 2: Соединение отклонено (Connection refused)</h3>
+<p><strong>Что делать:</strong></p>
+<ol>
+  <li>Проверьте, запущен ли контейнер: <code>docker compose ps</code>.</li>
+  <li>Убедитесь, что порт <code>5001</code> проброшен в <code>docker-compose.yml</code>.</li>
+  <li>Проверьте IP сервера (на сервере: <code>ip a</code> или <code>ifconfig</code>).</li>
+</ol>
+
+<h3>Проблема 3: Страница не найдена (404)</h3>
+<p><strong>Что делать:</strong></p>
+<ol>
+  <li>Используйте полный путь: <code>/v1/convert</code>, а не <code>/v1</code>.</li>
+  <li>Перезапустите контейнер: <code>docker compose down &amp;&amp; docker compose up -d</code>.</li>
+</ol>
+
+
+<h3>Проблема 4: Ошибка CORS в браузере</h3>
+<p><strong>Что делать:</strong></p>
+<ul>
+  <li>Если делаете AJAX‑запросы из фронтенда, добавьте CORS‑заголовки в бэкенд.</li>
+  <li>Для тестирования используйте <code>curl</code> или Swagger UI.</li>
+</ul>
+
+<h2>Дополнительные настройки</h2>
+
+<h3>Добавление healthcheck</h3>
+<p>Добавьте в <code>docker-compose.yml</code>:</p>
+<pre>healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+  interval: 30s
+  timeout: 10s
+  retries: 3</pre>
+
+
+<h3>Настройка HTTPS</h3>
+<ol>
+  <li>Добавьте <strong>Nginx</strong> или <strong>Caddy</strong> как обратный прокси.</li>
+  <li>Настройте SSL‑сертификат (например, через <strong>Let's Encrypt</strong>).</li>
+  <li>В <code>docker-compose.yml</code> измените порты:</li>
+</ol>
+<pre>ports:
+  - "443:5001"</pre>
+<p>Тогда URL будет: <code>https://&lt;IP&gt;/v1/convert</code>.</p>
+
+
+<h2>Полезные команды</h2>
+<ul>
+  <li><strong>Логи контейнера:</strong> <code>docker compose logs -f</code></li>
+  <li><strong>Пересобрать и перезапустить:</strong> <code>docker compose up -d --build</code></li>
+  <li><strong>Удалить контейнеры:</strong> <code>docker compose down</code></li>
+  <li><strong>Проверить IP сервера:</strong> <code>ip a</code> (или <code>ifconfig</code>)</li>
+  <li><strong>Проверить открытые порты:</strong> <code>sudo ss -tulnp | grep 5001</code></li>
+</ul>
+
+<hr>
+<footer>
+  <p><small>© 2025 Руководство по Docling Serve с OCR. Версия 1.0.</small></p>
+</footer>
+
+</body>
+</html>
