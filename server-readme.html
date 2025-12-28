@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Debian Apache Setup README</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #ffffff;
+      color: #111827;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+
+    h1 {
+      font-size: 28px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 0.3em;
+    }
+
+    h2 {
+      margin-top: 2em;
+      font-size: 22px;
+    }
+
+    h3 {
+      margin-top: 1.5em;
+      font-size: 18px;
+    }
+
+    pre {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e5e7eb;
+      margin: 32px 0;
+    }
+
+    ul {
+      margin-left: 1.2em;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 13px;
+      color: #6b7280;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Установка статического сайта на Debian 12 / 13.2 с Apache</h1>
+
+<p>
+Классическая схема установки простого сайта с файлом <code>index.html</code>
+на Debian 12 (Bookworm) или Debian 13.2 с использованием Apache.
+</p>
+
+<hr>
+
+<h2>Что используется</h2>
+<ul>
+  <li>Операционная система: Debian 12 / 13.2</li>
+  <li>Веб-сервер: Apache HTTP Server</li>
+  <li>Тип сайта: статический (<code>index.html</code>)</li>
+</ul>
+
+<hr>
+
+<h2>1. Обновление системы</h2>
+<pre><code>
+sudo apt update
+sudo apt upgrade -y
+</code></pre>
+
+<hr>
+
+<h2>2. Установка Apache</h2>
+<pre><code>
+sudo apt install apache2 -y
+</code></pre>
+
+<h3>Проверка</h3>
+<pre><code>
+systemctl status apache2
+</code></pre>
+
+<p>
+В браузере:
+</p>
+<pre><code>
+http://IP_СЕРВЕРА
+</code></pre>
+
+<p>
+Если отображается стандартная страница Apache — сервер работает.
+</p>
+
+<hr>
+
+<h2>3. Расположение сайта</h2>
+
+<p>
+Apache по умолчанию использует каталог:
+</p>
+
+<pre><code>
+/var/www/html/
+</code></pre>
+
+<p>
+Файл сайта:
+</p>
+
+<pre><code>
+/var/www/html/index.html
+</code></pre>
+
+<hr>
+
+<h2>4. Создание index.html</h2>
+
+<pre><code>
+sudo nano /var/www/html/index.html
+</code></pre>
+
+<p>Пример содержимого:</p>
+
+<pre><code>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Мой сервер</title>
+</head>
+<body>
+  <h1>Apache работает</h1>
+  <p>Debian + Apache</p>
+</body>
+</html>
+</code></pre>
+
+<p>
+Сохраните файл и обновите страницу в браузере.
+</p>
+
+<hr>
+
+<h2>5. Права доступа</h2>
+<pre><code>
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+</code></pre>
+
+<hr>
+
+<h2>6. Firewall (UFW)</h2>
+
+<p>Если используется UFW:</p>
+<pre><code>
+sudo apt install ufw -y
+sudo ufw allow 'Apache'
+sudo ufw enable
+</code></pre>
+
+<p>Минимальный вариант:</p>
+<pre><code>
+sudo ufw allow 80
+</code></pre>
+
+<hr>
+
+<h2>7. Проверка</h2>
+<pre><code>
+curl http://localhost
+</code></pre>
+
+<p>
+Если возвращается HTML — всё работает корректно.
+</p>
+
+<hr>
+
+<h2>Минимальный чек-лист</h2>
+<ul>
+  <li>Apache установлен</li>
+  <li>index.html находится в <code>/var/www/html</code></li>
+  <li>Порт 80 открыт</li>
+  <li>Права выставлены для <code>www-data</code></li>
+</ul>
+
+<hr>
+
+<h1>HTTPS (Let’s Encrypt)</h1>
+
+<p>
+Настройка HTTPS для Apache на Debian с использованием Let’s Encrypt.
+</p>
+
+<h2>Важно перед началом</h2>
+<ul>
+  <li>Домен должен существовать</li>
+  <li>A-запись домена должна указывать на IP сервера</li>
+  <li>Порт 80 должен быть открыт</li>
+</ul>
+
+<p>Проверка DNS:</p>
+<pre><code>
+ping example.com
+</code></pre>
+
+<hr>
+
+<h2>1. Установка Certbot</h2>
+<pre><code>
+sudo apt update
+sudo apt install certbot python3-certbot-apache -y
+</code></pre>
+
+<hr>
+
+<h2>2. VirtualHost</h2>
+
+<pre><code>
+sudo nano /etc/apache2/sites-available/example.com.conf
+</code></pre>
+
+<pre><code>
+<VirtualHost *:80>
+    ServerName example.com
+    ServerAlias www.example.com
+    DocumentRoot /var/www/html
+
+    ErrorLog ${APACHE_LOG_DIR}/example-error.log
+    CustomLog ${APACHE_LOG_DIR}/example-access.log combined
+</VirtualHost>
+</code></pre>
+
+<p>Активация:</p>
+<pre><code>
+sudo a2ensite example.com.conf
+sudo systemctl reload apache2
+</code></pre>
+
+<hr>
+
+<h2>3. Получение сертификата</h2>
+<pre><code>
+sudo certbot --apache
+</code></pre>
+
+<p>
+Во время выполнения выбирается домен и включается редирект HTTP → HTTPS.
+</p>
+
+<hr>
+
+<h2>4. Проверка HTTPS</h2>
+<pre><code>
+https://example.com
+</code></pre>
+
+<pre><code>
+curl -I https://example.com
+</code></pre>
+
+<p>Ожидаемый ответ:</p>
+<pre><code>
+HTTP/2 200
+</code></pre>
+
+<hr>
+
+<h2>5. Автопродление сертификатов</h2>
+
+<p>Проверка таймера:</p>
+<pre><code>
+systemctl list-timers | grep certbot
+</code></pre>
+
+<p>Тест продления:</p>
+<pre><code>
+sudo certbot renew --dry-run
+</code></pre>
+
+<hr>
+
+<h2>6. Расположение сертификатов</h2>
+<pre><code>
+/etc/letsencrypt/live/example.com/
+├── fullchain.pem
+├── privkey.pem
+</code></pre>
+
+<hr>
+
+<h2>Частые проблемы</h2>
+
+<h3>Certbot: connection refused</h3>
+<pre><code>
+sudo ufw allow 80
+sudo ufw allow 443
+</code></pre>
+
+<h3>Домен не найден</h3>
+<p>
+Обычно требуется подождать обновления DNS (5–30 минут).
+</p>
+
+<h3>Apache не стартует после SSL</h3>
+<pre><code>
+sudo apachectl configtest
+</code></pre>
+
+<hr>
+
+<h2>Итоговый чек-лист HTTPS</h2>
+<ul>
+  <li>Домен указывает на IP сервера</li>
+  <li>Apache работает по HTTP</li>
+  <li>Порт 80 открыт</li>
+  <li>Certbot установлен</li>
+  <li>Редирект на HTTPS включён</li>
+</ul>
+
+<footer>
+  README · Debian Apache Setup
+</footer>
+
+</body>
+</html>
