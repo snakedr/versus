@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics: Vivo Flagship Series Comparison 2026</title>
+    <style>
+        :root {
+            --primary: #0056b3; /* Более строгий синий */
+            --primary-dark: #003d80;
+            --secondary: #f4f6f9;
+            --text: #2c3e50;
+            --text-light: #6c757d;
+            --border: #dee2e6;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: #e9ecef;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px;
+            border-radius: 8px; /* Более строгие углы */
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            border: 1px solid #d1d5db;
+        }
+
+        /* Header Styles */
+        header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-main h1 {
+            font-size: 2.2em;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header-main .subtitle {
+            color: var(--text-light);
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+
+        .report-meta {
+            text-align: right;
+            font-size: 0.85em;
+            color: var(--text-light);
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            border-left: 4px solid;
+            font-size: 0.95em;
+        }
+
+        .alert-warning {
+            background: #fff8e1;
+            border-color: var(--warning);
+            color: #856404;
+        }
+
+        /* Table Styles */
+        .comparison-table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 40px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #495057;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 0.5px;
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            font-size: 0.95em;
+        }
+
+        .feature-col {
+            width: 15%;
+            font-weight: 600;
+            color: var(--primary-dark);
+            background: #fcfcfc;
+            border-right: 1px solid var(--border);
+        }
+
+        .model-col {
+            width: 28%;
+        }
+
+        .specs-list {
+            list-style: none;
+        }
+
+        .specs-list li {
+            margin-bottom: 6px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .specs-list li::before {
+            content: "•";
+            color: var(--primary);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .diff-tag {
+            display: inline-block;
+            font-size: 0.75em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 5px;
+            font-weight: 600;
+        }
+        .tag-down { background: #ffebeb; color: #dc3545; }
+        .tag-up { background: #e6fffa; color: #00a884; }
+
+        /* Verdict Cards */
+        .verdict-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .verdict-card {
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .verdict-card h3 {
+            font-size: 1.1em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        /* SOURCES SECTION (NEW) */
+        .sources-container {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 3px solid var(--border);
+            background: #fcfcfc;
+            padding: 30px;
+            border-radius: 4px;
+        }
+
+        .sources-header {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            font-size: 0.9em;
+        }
+
+        .source-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .source-name {
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .source-desc {
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .disclaimer {
+            margin-top: 25px;
+            font-size: 0.85em;
+            color: #666;
+            padding-top: 15px;
+            border-top: 1px dotted var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            header { flex-direction: column; align-items: flex-start; }
+            .report-meta { text-align: left; margin-top: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-main">
+                <h1>Анализ линейки Vivo: Q1 2026</h1>
+                <div class="subtitle">Сравнительный технический отчет: X200 vs X300 Series</div>
+            </div>
+            <div class="report-meta">
+                Дата отчета: 06 Января 2026<br>
+                Регион: Global / CN / Leaks<br>
+                Статус: Актуально
+            </div>
+        </header>
+
+        <div class="alert alert-warning">
+            <strong>⚠️ Техническое примечание (Regional Hardware Variance):</strong>
+            <p>Подтверждены конструктивные различия глобальных версий серии X300. Использование литий-ионных (Li-Ion) элементов вместо кремний-углеродных (Si/C) в глобальных поставках привело к снижению плотности энергии и номинальной емкости аккумуляторов (~ -800 мАч по сравнению с CN-версиями).</p>
+        </div>
+
+        <div class="comparison-table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="feature-col">Спецификация</th>
+                        <th class="model-col">Vivo X200 Ultra<br><span style="color:#666; font-weight:400; font-size:0.9em;">(Current Flagship)</span></th>
+                        <th class="model-col">Vivo X300 Pro<br><span style="color:#666; font-weight:400; font-size:0.9em;">(Global Launch)</span></th>
+                        <th class="model-col">Vivo X300 Ultra<br><span style="color:#666; font-weight:400; font-size:0.9em;">(Projected Specs)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="feature-col">Дисплейная панель</td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>6.78" 2K LTPO AMOLED</li>
+                                <li>Quad-Curved (Изогнутый)</li>
+                                <li>3000 nits (HBM)</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>6.78" 1.5K LTPO <span class="diff-tag tag-up">BOE Q10+</span></li>
+                                <li>Flat (Плоский) <span class="diff-tag tag-up">Trend</span></li>
+                                <li>4500 nits (Peak)</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>6.82" 2K+ LTPO 2.0</li>
+                                <li>Micro-Quad Curved</li>
+                                <li>Ультразвук 2.0 (Qualcomm)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="feature-col">Платформа (SoC)</td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>Snapdragon 8 Elite</li>
+                                <li>3nm TSMC</li>
+                                <li>~3.0M AnTuTu</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>Dimensity 9400/9500 (Reg. dep.)</li>
+                                <li>AI-ISP V3+ Coprocessor</li>
+                                <li>Энергоэффективный профиль</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>Snapdragon 8 Elite "V2" <span class="diff-tag tag-up">Overclock</span></li>
+                                <li>Custom Adreno GPU</li>
+                                <li>Dual NPU Architecture</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="feature-col">Камеры (Optics)</td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>50MP Main (1" LYT-900)</li>
+                                <li>200MP Periscope (3.7x)</li>
+                                <li>Zeiss T* Coating</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>50MP Main (1/1.28" LYT-818)</li>
+                                <li>50MP Periscope (3x) <span class="diff-tag tag-down">Downgrade</span></li>
+                                <li>Макро-режим 2.0</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>50MP Main (1" Updated)</li>
+                                <li>Dual Periscope System <span class="diff-tag tag-up">New</span></li>
+                                <li>8K Video / 4K 120fps All Lens</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="feature-col">Питание</td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>6000 mAh (Si/C)</li>
+                                <li>80W Wired / 30W Wireless</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>5700 mAh (Global) <span class="diff-tag tag-down">Vs CN 6500</span></li>
+                                <li>90W Wired</li>
+                                <li>30W Wireless</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="specs-list">
+                                <li>6100-6200 mAh (Est.)</li>
+                                <li>100W+ Wired</li>
+                                <li>50W Wireless</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="verdict-section">
+            <div class="verdict-card">
+                <h3>📌 X200 Ultra: Текущий Стандарт</h3>
+                <p>Остается релевантным благодаря 200МП телевику, который превосходит модуль в X300 Pro. Оптимальный выбор по соотношению цена/качество после снижения цен.</p>
+            </div>
+            <div class="verdict-card">
+                <h3>📌 X300 Pro (Global): Эргономика</h3>
+                <p>Ключевое преимущество — плоский экран BOE Q10 высшего грейда и новый дизайн. Однако "штраф" за глобальную версию в виде урезанной батареи и упрощенного телевика делает его спорным обновлением для владельцев X100/X200 Ultra.</p>
+            </div>
+            <div class="verdict-card">
+                <h3>📌 X300 Ultra: Технологический Максимум</h3>
+                <p>Единственный реальный "Next-Gen". Ожидается весной. Рекомендуется к ожиданию тем, кому нужна видеосъемка уровня Pro (4K/120fps) и максимальный зум.</p>
+            </div>
+        </div>
+
+        <!-- NEW SOURCES SECTION -->
+        <div class="sources-container">
+            <div class="sources-header">
+                <span>📚 Источники данных и методология (References)</span>
+            </div>
+            <div class="sources-grid">
+                <div class="source-item">
+                    <span class="source-name">NotebookCheck & GSMArena (Tech Specs)</span>
+                    <span class="source-desc">Подтвержденные спецификации глобальных версий, данные о различиях в типах аккумуляторов (Si/C Carbon vs Li-Ion) и вольтаже зарядки для рынков EU/Global.</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-name">Digital Chat Station / Supply Chain</span>
+                    <span class="source-desc">Инсайдерские данные (Weibo) о конфигурации сенсоров Sony LYT-series и тестировании разогнанной версии Snapdragon 8 Elite для модели Ultra.</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-name">3C Certification Database</span>
+                    <span class="source-desc">Регуляторные записи о мощности зарядных устройств (20V/5A, 20V/6A) и протоколах беспроводной зарядки для моделей серии V24xx.</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-name">Vivo Official Presentations (CN)</span>
+                    <span class="source-desc">Техническая документация по дисплеям BOE Q10, алгоритмам обработки изображений BlueImage и архитектуре OriginOS.</span>
+                </div>
+            </div>
+            <div class="disclaimer">
+                <strong>Disclaimer:</strong> Данный отчет является агрегацией подтвержденных технических характеристик и аналитических прогнозов высокого уровня достоверности. Спецификации модели X300 Ultra (Global) могут быть скорректированы производителем до официального анонса весной 2026 года.
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
